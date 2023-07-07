@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
     MDBInput,
     MDBCol,
@@ -16,7 +17,7 @@ import { auth } from "../config/firebase"
 
 export default function Register() {
 
-
+    const navigate = useNavigate('')
     const [email, setEmail] = useState('')
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
@@ -28,6 +29,7 @@ export default function Register() {
         createUserWithEmailAndPassword(auth,email, password).then(()=>{
 
             alert("User has been registered successfully")
+            navigate('/login')
            // console.log("User has been registered successfully")
 
         }).catch((error)=>{
@@ -70,7 +72,7 @@ export default function Register() {
                     <div className='mb-4'>
 
                         < MDBCol>
-                            <a href='/login'>Login</a>
+                            <Link to='/login'>Login</Link>
                         </ MDBCol>
                     </div>
                     <br></br>

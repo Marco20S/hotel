@@ -8,19 +8,19 @@ import {
     MDBBtn
 } from 'mdb-react-ui-kit';
 
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../config/firebase";
 
 
 export default function Login() {
 
-    const navigate = useNavigate()
-    const [email, setEmail] = useState()
-    const [password, setPassword] = useState()
+    const navigate = useNavigate('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
 
 
 
-    const gotohomePage = (e) => {
+    const gotohomePage = ((e) => {
         e.preventDefault();
         signInWithEmailAndPassword(auth, email, password).then(() => {
             alert("Successfully Logged in")
@@ -28,12 +28,29 @@ export default function Login() {
 
         }).catch((error) => {
 
+            document.getElementById('message').style.display = "block"
+            document.getElementById('message').style.color = "red"
+            document.getElementById('message').hidden = false
 
         })
 
+    })
 
 
-    }
+
+    // const gotohomePage = getAuth();
+    // signInWithEmailAndPassword(auth, email, password)
+    //     .then((userCredential) => {
+    //         // Signed in 
+    //         const user = userCredential.user;
+    //         alert("Successfully Logged in")
+    //         navigate('/')
+    //         // ...
+    //     })
+    //     .catch((error) => {
+    //         const errorCode = error.code;
+    //         const errorMessage = error.message;
+    //     });
 
 
 
@@ -67,7 +84,7 @@ export default function Login() {
                     </div>
                     <br></br>
 
-                    <p id="message" hidden className="message" >user entered the incorrect username or password </p>
+                    <p id="message" hidden className="message" >User entered the incorrect Username or Password! </p>
 
                     <button type='submit' onClick={gotohomePage} className="btnsign" >
                         Sign in

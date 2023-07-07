@@ -11,6 +11,15 @@ export default function EditHome() {
 
   const [show, setShow] = useState(false)
 
+  const [address, setAddress] = useState('')
+  const [map, setMap] = useState('')
+  const [contact, setContact] = useState('')
+  const [socials, setSocials] = useState('')
+  const [facalties, setFacalties] = useState('')
+  const [policy, setPolicy] = useState('')
+  const [rating, setRating] = useState('')
+  const [check, setCheck] = useState('')
+
 
   return (
     <div>
@@ -48,7 +57,7 @@ export default function EditHome() {
           <input type='text' className='mail' placeholder="Rating" id='form2Example1' label='Map URL/ Location' />
 
           <br />
-          <input type='password' className='mail' placeholder="Check In/Check Out Dates" id='form2Example2' label='Password' />
+          <input type='datetime-local' className='mail' placeholder="Check In/Check Out Dates" id='form2Example2' label='Password' />
           <br />
 
 
@@ -71,6 +80,50 @@ export default function EditHome() {
       <br></br>
 
       <h1>Details Assigned </h1>
+
+      <table className="table">
+        <tbody>
+          <tr>
+            <th>Address </th>
+            <th>Map </th>
+            <th>Contact details </th>
+            <th>Cocial media Icons </th>
+            <th>Facalties </th>
+            <th>Policy </th>
+            <th>Rating </th>
+            <th>Check in/ Check Out Dates </th>
+            <th>Operations </th>
+
+          </tr>
+
+          {/* {((data, index) => {
+
+                        return (
+                            <tr>
+
+                                <td>{data.address}</td>
+                                <td>{data.map}</td>
+                                <td>{data.contact}</td>
+                                <td>{data.socials}</td>
+                                <td>{data.facalties}</td>
+                                <td>{data.policy}</td>
+                                <td>{data.rating}</td>
+                                <td>{data.check}</td>
+
+                                <td>
+                                    <button >Delete</button>
+                                    <button >Update</button>
+                                </td>
+                            </tr>
+
+
+
+                        )
+                    })} */}
+
+
+        </tbody>
+      </table>
 
     </div>
   )

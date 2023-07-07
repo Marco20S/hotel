@@ -1,27 +1,30 @@
 import React from 'react'
 
 import Footer from './Footer'
+import Welcome from '../components/welcome'
 
 export default function Home() {
 
   return (
 
-   <>
+    <>
+      <section>
 
-   <headers>
-   
-   </headers>
-
-   <body>
+        <Welcome/>
+        
+      </section>
 
 
-   </body>
-   
-   
-   
-   <Footer/>
-   
-   </>
+      <section className="body">
+
+      </section>
+
+      <section className='footer'>
+        <Footer />
+      </section>
+
+
+    </>
   )
 }
 
