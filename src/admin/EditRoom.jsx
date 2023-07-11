@@ -4,19 +4,22 @@ import React, { useEffect, useState } from 'react'
 
 import { database } from '../config/firebase'
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, updateDoc } from 'firebase/firestore'
+import { storage } from "../config/firebase"
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage"
 
 export default function EditRoom() {
 
     const [show, setShow] = useState(false)
     const [type, setType] = useState('')
     const [price, setPrice] = useState('')
-    const [mainImage, setMainImages] = useState('')
+    const [roomNumber, setRoomNumber] = useState('')
     const [subImages, setSubImages] = useState('')
     const [beds, setBeds] = useState('')
     const [occupents, setOccupents] = useState('')
     const [id, setId] = useState('')
 
     const [val, setVal] = useState([])//data will be pushed into this array
+
 
 
     const value = collection(database, "AddNewRooms")
@@ -33,9 +36,9 @@ export default function EditRoom() {
 
 
     //submitting room info to firestore database
-    const handleCreate = async (e) => {
-        e.preventDefault()
-        await addDoc(value, { type1: type, price1: price, mainImage1: mainImage, subImages1: subImages, beds1: beds, occupents1: occupents })
+    const handleCreate = async () => {
+
+        await addDoc(value, { type1: type, price1: price, Room: roomNumber, subImages1: "", beds1: beds, occupents1: occupents })
 
     }
 
@@ -47,10 +50,10 @@ export default function EditRoom() {
     }
 
     //Updates the initial room info from firestore database
-    const handleEdit = async (id, type1, price1, mainImage1, subImage1, beds1, occupents1) => {
+    const handleEdit = async (id, type1, price1, roomNumber, subImage1, beds1, occupents1) => {
         setType(type1)
         setPrice(price1)
-        setMainImages(mainImage1)
+        setRoomNumber(roomNumber)
         setSubImages(subImage1)
         setBeds(beds1)
         setOccupents(occupents1)
@@ -61,18 +64,54 @@ export default function EditRoom() {
 
     const handleUpdate = async () => {
         const updateData = doc(database, "AddNewRooms", id)
-        await updateDoc(updateData, { type1: type, price1: price, mainImage1: mainImage, subImages1: subImages, beds1: beds, occupents1: occupents })
+        await updateDoc(updateData, { type1: type, price1: price, Room: roomNumber, subImages1: "", beds1: beds, occupents1: occupents })
         setShow(false)
     }
 
-    // const handleShow = (t) => {
-    //     setCurrentTask(t)
-    //     setShow(true)
-    //     console.log("display.js", t)
+    //upload main image
+    // const uploadFirstImages = async () => {
 
+
+    //     if (!mainImage) return;
+
+    //     const imageRef = ref(storage, `Room/Mainimage/${mainImage.name}`)
+
+    //     uploadBytes(imageRef, mainImage).then((snapshot) => {
+    //         getDownloadURL(snapshot.ref).then((url) => {
+    //             setMainImages(url);
+    //         })
+    //     })
     // }
 
 
+    // uploade multipule (Sub) images
+    const uploadImages = async () => {
+        const imageURl = [];
+
+        for (let i = 0; i < subImages.length; i++) {
+
+            const imageRefe = ref(storage, `Room/Subimage/${subImages[i].name}`);
+
+            await uploadBytes(imageRefe, subImages[i]).then((snapshot) => {
+                getDownloadURL(snapshot.ref).then((url) => {
+                    imageURl.push(url);
+                })
+            }).catch(() => {
+                console.log("Error")
+            })
+        }
+
+        setSubImages(imageURl)
+
+    }
+
+    const upload = (event) => {
+        event.preventDefault();
+        //uploadFirstImages();
+        uploadImages();
+        handleCreate();
+
+    }
 
 
     return (
@@ -84,43 +123,43 @@ export default function EditRoom() {
             <p>Welcome, Admin in order for you to add a new room click the button below</p>
 
 
-            {show ?
-                <form >
+            {/* {show ? */}
+            <form >
 
-                    <br />
-                    <br />
+                <br />
+                <br />
 
-                    <p>Please enter the following details</p>
-                    <br />
+                <p>Please enter the following details</p>
+                <br />
 
-                    <input type='text' value={type} className='mail' placeholder="Type" id='form2Example1' label='Address' onChange={(e) => setType(e.target.value)} />
+                <input type='text' value={type} className='mail' placeholder="Type" id='form2Example1' label='Address' onChange={(e) => setType(e.target.value)} />
 
-                    <br />
-                    <input type='text' value={price} className='mail' placeholder="Price" id='form2Example1' label='Map URL/ Location' onChange={(e) => setPrice(e.target.value)} />
+                <br />
+                <input type='text' value={price} className='mail' placeholder="Price" id='form2Example1' label='Map URL/ Location' onChange={(e) => setPrice(e.target.value)} />
 
-                    <br />
-                    <input type='file' value={mainImage} className='mail' placeholder="Main Room Image" id='form2Example2' label='Password' onChange={(e) => setMainImages(e.target.value)} />
+                <br />
+                <input type='text' value={roomNumber} className='mail' placeholder="Room Number" id='form2Example2' label='Password' onChange={(e) => setRoomNumber(e.target.value)} />
 
-                    <br />
-                    <input type='file' value={subImages} className='mail' placeholder="Sub Images Of Room" id='form2Example2' label='Password' onChange={(e) => setSubImages(e.target.value)} />
+                <br />
+                <input type='file' multiple className='mail' placeholder="Sub Images Of Room" id='form2Example2' label='Password' onChange={(e) => setSubImages(e.target.files)} />
 
-                    <br />
-                    <input type='number' value={beds} className='mail' placeholder="Number Of Beds" id='form2Example2' label='Password' onChange={(e) => setBeds(e.target.value)} />
+                <br />
+                <input type='number' value={beds} className='mail' placeholder="Number Of Beds" id='form2Example2' label='Password' onChange={(e) => setBeds(e.target.value)} />
 
-                    <br />
-                    <input type='number' value={occupents} className='mail' placeholder="Number Of Occupents" id='form2Example2' label='Password' onChange={(e) => setOccupents(e.target.value)} />
-                    <br />
+                <br />
+                <input type='number' value={occupents} className='mail' placeholder="Number Of Occupents" id='form2Example2' label='Password' onChange={(e) => setOccupents(e.target.value)} />
+                <br />
 
-                    <br></br>
+                <br></br>
 
-                    {show?<button  onClick={handleCreate} className="btnsign" >Add Rooms</button>:
-                   <button onClick={handleUpdate} className="btnsign" >
+                {!show ? <button onClick={upload} className="btnsign" >Add Rooms</button> :
+                    <button onClick={handleUpdate} className="btnsign" >
                         Update
                     </button>}
-                    <br />
+                <br />
 
-                </form > : true
-            }
+            </form > 
+            {/* } */}
             <br />
 
             <button className="btnsign" onClick={() => setShow(!show)}>Enter New Room Form</button>
@@ -139,7 +178,7 @@ export default function EditRoom() {
                     <tr>
                         <th>Type</th>
                         <th>Price</th>
-                        <th>Main Image</th>
+                        <th>Room Number</th>
                         <th>Sub Image</th>
                         <th>Number of Beds</th>
                         <th>Number of Occupents</th>
@@ -158,6 +197,7 @@ export default function EditRoom() {
                                 <td>{data.subImage1}</td>
                                 <td>{data.beds1}</td>
                                 <td>{data.occupents1}</td>
+                                
 
                                 <td>
                                     <button onClick={() => handleDelete(data.id)} >Delete</button>

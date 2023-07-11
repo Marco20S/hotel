@@ -4,7 +4,7 @@ export default function editInfo() {
   return (
     <div> <form>
     <br />
-
+  
     <p>Please enter the following details</p>
     <br />
 

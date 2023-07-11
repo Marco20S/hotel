@@ -2,6 +2,8 @@ import React from 'react'
 
 import Footer from './Footer'
 import Welcome from '../components/welcome'
+import SingleCard from '../components/singleCard'
+
 
 export default function Home() {
 
@@ -15,7 +17,12 @@ export default function Home() {
       </section>
 
 
-      <section className="body">
+      <section className="main-container">
+      <SingleCard/>
+     
+      <SingleCard/>
+      <SingleCard/>
+      <SingleCard/>
 
       </section>
 

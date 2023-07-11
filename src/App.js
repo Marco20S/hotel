@@ -9,6 +9,8 @@ import EditHome from './admin/editHome';
 import EditRoom from './admin/EditRoom';
 import Rooms from './customer/Rooms';
 import Bookings from './customer/bookings';
+import singleCard from './components/singleCard';
+
 
 
 
@@ -26,7 +28,8 @@ export default function App() {
         <Route path='/' element= {<Home/>} />
         <Route path='/edithome' element= {<EditHome/>}/>
         <Route path='/editroom' element= {<EditRoom/>}/>
-        <Route path='/Rooms' element= {<Rooms/>}/>
+        <Route path='/Rooms' element= {<Rooms/>}/> 
+        <Route path='/cards' element= {<singleCard/>}/> 
         <Route path='/bookings' element= {<Bookings/>}/>
       </Routes>
     </Router>
