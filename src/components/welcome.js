@@ -1,15 +1,23 @@
 import React from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 
 export default function Welcome() {
+
+    const navigate = useNavigate('')
+
+    const gotobookings = ((e) => {
+
+        navigate('/bookings')
+    })
 
     return (
         <>
 
-            <div className='header'>
+            <div className='container'>
                 <br />
                 {/* <img src="../src/images/sandy.jpg" width="" /> */}
 
-                <h1>Welcome to The VillaParade </h1>
+                <h1>Welcome to The Sky Hotel </h1>
 
                 <h3>The coolest hotel in the South Coast!</h3>
 
@@ -22,7 +30,7 @@ export default function Welcome() {
                     The VillaParade has all-day dining for breakfast, lunch and dinner.</p> */}
 
                 <br />
-                <div className='button'><button className='btnsign'> Book Now </button></div>
+                <div className='button'> <button className='btnsign' onClick={gotobookings} > Book Now </button></div>
 
             </div>
 

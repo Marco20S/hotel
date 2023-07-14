@@ -209,7 +209,8 @@ form {
 }
 
 .header{
- height: 500px;
+  
+ height: 400px;
   /* //background-image: url("../src/images/west.jpg"); */
   /* background: linear-gradient(90deg, rgb(217, 217, 217) 0%, rgb(201, 214, 255) 100%); */
   background-size: cover;
@@ -217,6 +218,7 @@ form {
   margin-right: auto;
   margin-left: auto;
   align-items: center;
+  padding: 12px ;
 
   
 }
@@ -224,6 +226,8 @@ form {
 
 p.small{
   font-size: 29px;
+  margin-right: auto;
+  margin-left: auto;
 }
 
 .button{
@@ -236,11 +240,15 @@ p.small{
   transition: 0.3s;
   border-radius: 5px; /* 5px rounded corners */
   width: 400px;
-  height: 350px;
+  height: 300px;
   margin-right: auto;
   margin-left: auto;
-  padding: 10px ;
+  padding: 12px ;
   background: linear-gradient(90deg, rgb(217, 217, 217) 0%, rgb(255, 255, 255) 100%);
+}
+
+.card:hover {
+  box-shadow: 0 8px 20px 0 rgba(0,0,0,0.2);
 }
 
 /* Add rounded corners to the top left and the top right corner of the image */
@@ -254,4 +262,65 @@ img {
   flex-wrap: wrap;
   gap: 10px;
   padding-top: 20px ;
+  text-align: center;
+
+}
+
+.main-container-header{
+  position: relative;
+  width: 100%;
+}
+
+
+
+.container {
+  position: relative;
+  width: 50%;
+  
+}
+
+.image {
+  display: block;
+  width: 100%;
+  height: auto;
+  
+}
+
+.container:hover .image {
+  opacity: 1;
+  filter: blur(1px);
+  
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  transition: .5s ease;
+  
+  
+  
+}
+
+.container:hover .overlay {
+  opacity: 1;
+  
+  
+}
+
+.text {
+  color: whitesmoke;
+  font-size: 30px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  text-align: center;
 }

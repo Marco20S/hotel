@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import SkyHotel from '../images/SkyHotel.png'
+
 
 
 export default function Navbar() {
@@ -16,7 +18,7 @@ export default function Navbar() {
 				<Link to='/'> Home  </Link>
 				<Link to='/Rooms'> Rooms  </Link>
 				<Link to='/bookings'> Bookings  </Link>
-				<button type='submit' className="btnn"><a href='/login'> Signout</a></button>
+				<button type='submit' className="btnsign"><a href='/login'> Signout</a></button>
 				<div className="dot"></div>
 			</nav>
 			<br/>

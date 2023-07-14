@@ -26,13 +26,13 @@ export default function Register() {
     const register = (e) => {
         e.preventDefault();
         console.log("line 26");
-        createUserWithEmailAndPassword(auth,email, password).then(()=>{
+        createUserWithEmailAndPassword(auth, email, password).then(() => {
 
             alert("User has been registered successfully")
             navigate('/login')
-           // console.log("User has been registered successfully")
+            // console.log("User has been registered successfully")
 
-        }).catch((error)=>{
+        }).catch((error) => {
 
             console.log(error.message)
 
@@ -46,7 +46,8 @@ export default function Register() {
 
     return (
         <>
-            <div>
+            <div >
+                <br/>
                 <form>
 
                     <h1>Sign Up </h1>
@@ -69,17 +70,19 @@ export default function Register() {
                     <br />
                     <input type='password' className='mail' placeholder="Password" id='form2Example2' label='Password' onChange={(e) => setPassword(e.target.value)} />
 
-                    <div className='mb-4'>
 
-                        < MDBCol>
-                            <Link to='/login'>Login</Link>
-                        </ MDBCol>
-                    </div>
                     <br></br>
 
                     <button type='submit' onClick={register} className="btnsign" >
                         Register
                     </button>
+
+                        <br />
+                       <p>Already have an account? <Link to='/login'> Login</Link></p>
+                        <br />
+
+                   
+
                     <br />
 
                 </form >
