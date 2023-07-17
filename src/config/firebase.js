@@ -33,4 +33,4 @@ export {auth}
 export default getFirestore(app)
 export const database = getFirestore(app)
 export const storage = getStorage(app)
-// export const database = firebase.firestore();
+//export const db = firebase.firestore(app);

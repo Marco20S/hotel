@@ -68,21 +68,7 @@ export default function EditRoom() {
         setShow(false)
     }
 
-    //upload main image
-    // const uploadFirstImages = async () => {
-
-
-    //     if (!mainImage) return;
-
-    //     const imageRef = ref(storage, `Room/Mainimage/${mainImage.name}`)
-
-    //     uploadBytes(imageRef, mainImage).then((snapshot) => {
-    //         getDownloadURL(snapshot.ref).then((url) => {
-    //             setMainImages(url);
-    //         })
-    //     })
-    // }
-
+   
 
     // uploade multipule (Sub) images
     const uploadImages = async () => {
