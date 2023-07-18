@@ -13,9 +13,6 @@ export default function Bookinglist({ }) {
 
                 // Fetch all bookings from Firestore
 
-                // const snapshot = await database.collection('bookings').get();
-                // const bookingQuery = query(collection(database, 'bookings'))
-                // const querySnapshot = await getDocs(bookingQuery);
                 const snapshot = await getDocs(collection(database, 'bookings'))
                 //where('roomId', '==', roomId))
                 const bookingsData = snapshot.docs.map((doc) => ({
@@ -35,9 +32,9 @@ export default function Bookinglist({ }) {
         <>
             <h2>Bookings:</h2>
 
-            <div className="card-container">
+            <div className="card">
                 {bookings.map((booking) => (
-                    <div key={booking.id} className="card">
+                    <div key={booking.id} className="container">
                         <h3>{booking.name}</h3>
                         {/* //<h4>Room Type {bookings.roomId}</h4> */}
                         <p>Occupents: {booking.occupents}</p>
@@ -46,9 +43,10 @@ export default function Bookinglist({ }) {
                     </div>
                 ))}
             </div>
-            <br/>
-            <br/>
-{/* 
+            <br />
+            <br />
+
+            {/* 
             {bookings.map((booking) => (
                 <div key={booking.id}>
                     <h3>{booking.name}</h3>
@@ -56,6 +54,7 @@ export default function Bookinglist({ }) {
                     <p>Check-out: {booking.checkOutDate}</p>
                 </div>
             ))} */}
+
         </>
     )
 }

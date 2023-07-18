@@ -2,6 +2,7 @@ import React from 'react'
 
 import SingleCard from '../components/singleCard'
 import Footer from '../pages/Footer'
+import Roomlist from './roomlist'
 
 export default function Rooms() {
   return (
@@ -19,11 +20,12 @@ export default function Rooms() {
 
 
       <section className="main-container">
-
+{/* 
         <SingleCard />
         <SingleCard />
         <SingleCard />
-        <SingleCard />
+        <SingleCard /> */}
+        <Roomlist/>
 
       </section>
 

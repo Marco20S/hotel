@@ -13,7 +13,8 @@ export default function EditRoom() {
     const [type, setType] = useState('')
     const [price, setPrice] = useState('')
     const [roomNumber, setRoomNumber] = useState('')
-    const [subImages, setSubImages] = useState('')
+    const [subImages, setSubImages] = useState([])
+    const [imageUrls, setImageUrls] = useState([])
     const [beds, setBeds] = useState('')
     const [occupents, setOccupents] = useState('')
     const [id, setId] = useState('')
@@ -38,7 +39,7 @@ export default function EditRoom() {
     //submitting room info to firestore database
     const handleCreate = async () => {
 
-        await addDoc(value, { type1: type, price1: price, Room: roomNumber, subImages1: "", beds1: beds, occupents1: occupents })
+        await addDoc(value, { type: type, price: price, room: roomNumber, subImages: imageUrls, beds: beds, occupents: occupents })
 
     }
 
@@ -50,13 +51,13 @@ export default function EditRoom() {
     }
 
     //Updates the initial room info from firestore database
-    const handleEdit = async (id, type1, price1, roomNumber, subImage1, beds1, occupents1) => {
-        setType(type1)
-        setPrice(price1)
+    const handleEdit = async (id, type, price, roomNumber, subImage, beds, occupents) => {
+        setType(type)
+        setPrice(price)
         setRoomNumber(roomNumber)
-        setSubImages(subImage1)
-        setBeds(beds1)
-        setOccupents(occupents1)
+        setSubImages(subImage)
+        setBeds(beds)
+        setOccupents(occupents)
         setId(id)
         setShow(true)
 
@@ -64,11 +65,11 @@ export default function EditRoom() {
 
     const handleUpdate = async () => {
         const updateData = doc(database, "AddNewRooms", id)
-        await updateDoc(updateData, { type1: type, price1: price, Room: roomNumber, subImages1: "", beds1: beds, occupents1: occupents })
+        await updateDoc(updateData, { type: type, price: price, Room: roomNumber, subImages: subImages, beds: beds, occupents: occupents })
         setShow(false)
     }
 
-   
+
 
     // uploade multipule (Sub) images
     const uploadImages = async () => {
@@ -86,16 +87,19 @@ export default function EditRoom() {
                 console.log("Error")
             })
         }
-
-        setSubImages(imageURl)
+        console.log(imageURl);
+        // setSubImages(imageURl)
+        setImageUrls(imageURl)
 
     }
 
     const upload = (event) => {
         event.preventDefault();
         //uploadFirstImages();
-        uploadImages();
-        handleCreate();
+        uploadImages().then(() => {
+            handleCreate();
+        });
+     
 
     }
 
@@ -144,7 +148,7 @@ export default function EditRoom() {
                     </button>}
                 <br />
 
-            </form > 
+            </form >
             {/* } */}
             <br />
 
@@ -177,17 +181,17 @@ export default function EditRoom() {
                         return (
                             <tr>
 
-                                <td>{data.type1}</td>
-                                <td>{data.price1}</td>
-                                <td>{data.mainImage1}</td>
-                                <td>{data.subImage1}</td>
-                                <td>{data.beds1}</td>
-                                <td>{data.occupents1}</td>
-                                
+                                <td>{data.type}</td>
+                                <td>{data.price}</td>
+                                <td>{data.room}</td>
+                                <td>{data.subImages[0]}</td>
+                                <td>{data.beds}</td>
+                                <td>{data.occupents}</td>
+
 
                                 <td>
                                     <button onClick={() => handleDelete(data.id)} >Delete</button>
-                                    <button onClick={() => handleEdit(data.id, data.type1, data.price1,)} >Update</button></td>
+                                    <button onClick={() => handleEdit(data.id, data.type, data.price,)} >Update</button></td>
                             </tr>
 
                         )

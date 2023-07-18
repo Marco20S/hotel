@@ -29,18 +29,15 @@ export default function Bookings() {
 
     try {
       // Reference the 'bookings' collection
-      //const bookingRef = database.collection('bookings');
+      
       const bookingRef = await addDoc(collection(database, 'bookings'), newBooking);
-
-
       // Add the booking data to Firestore
+      
       console.log("Booking ref id", bookingRef.id);
       setName('');
       setOccupents('');
       setCheckInDate('');
       setCheckOutDate('');
-
-
 
     } catch (error) {
 
