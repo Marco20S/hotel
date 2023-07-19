@@ -13,6 +13,7 @@ import EditRoom from './admin/EditRoom';
 import Rooms from './customer/Rooms';
 import Bookings from './customer/bookings';
 import singleCard from './components/singleCard';
+import Room from './customer/room';
 
 
 
@@ -32,6 +33,7 @@ export default function App() {
     <Navbar/>
       <Routes>
         <Route path='/login' element={<Login/>}    /> 
+        <Route path='/Rooms/room' element={<Room/>}    />
         <Route path='/register'  element= {<Register/>} />
         <Route path='/' element= {<Home/>} />
         <Route path='/edithome' element= {<EditHome/>}/>

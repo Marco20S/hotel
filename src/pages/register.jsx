@@ -11,25 +11,60 @@ import {
 
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
 import { auth } from "../config/firebase"
-
-
+import { database } from '../config/firebase'
+import { addDoc, collection, doc, getDocs, setDoc } from 'firebase/firestore';
 
 
 export default function Register() {
 
     const navigate = useNavigate('')
     const [email, setEmail] = useState('')
-    const [username, setUsername] = useState('')
+    const [role, setRole] = useState('guest')
     const [password, setPassword] = useState('')
+    const [name, setName] = useState('')
+
+
+    const newUsers = async () => {
+
+        const newUser = {
+            email,
+            name,
+            role,
+        };
+
+        try {
+            // Reference the 'admin' collection
+
+            // const userRef = await addDoc(collection(database, 'admin'), newUser);
+            const userRef = await setDoc(doc(database, 'admin', newUser.email), newUser)
+
+
+            // Add the user data to Firestore
+            console.log("User ref id", userRef.id);
+            setEmail('');
+            setPassword('*****************')
+            setName('');
+            setRole('guest');
+
+        } catch (error) {
+
+            console.log('Error adding new User:', error);
+
+        }
+    };
 
 
     const register = (e) => {
         e.preventDefault();
-        console.log("line 26");
-        createUserWithEmailAndPassword(auth, email, password).then(() => {
 
-            alert("User has been registered successfully")
-            navigate('/login')
+        alert("User has been registered successfully")
+
+
+        createUserWithEmailAndPassword(auth, email, password,).then(() => {
+
+            newUsers();
+
+            navigate('/')
             // console.log("User has been registered successfully")
 
         }).catch((error) => {
@@ -47,7 +82,7 @@ export default function Register() {
     return (
         <>
             <div >
-                <br/>
+                <br />
                 <form>
 
                     <h1>Sign Up </h1>
@@ -60,11 +95,11 @@ export default function Register() {
                     <br></br>
                     <br />
 
-                    {/* <label>Username</label>
+                    <label>Username</label>
                     <br />
-                    <input type='text' className='mail' placeholder="Username" id='form2Example1' label='Username' onChange={(e)=> setUsername(e.target.value)} />
+                    <input type='text' className='mail' placeholder="Username" id='form2Example1' label='Username' onChange={(e) => setName(e.target.value)} />
 
-                    <br></br> */}
+                    <br></br>
 
                     <label>Password</label>
                     <br />
@@ -77,11 +112,9 @@ export default function Register() {
                         Register
                     </button>
 
-                        <br />
-                       <p>Already have an account? <Link to='/login'> Login</Link></p>
-                        <br />
-
-                   
+                    <br />
+                    <p>Already have an account? <Link to='/login'> Login</Link></p>
+                    <br />
 
                     <br />
 

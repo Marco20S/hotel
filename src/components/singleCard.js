@@ -2,6 +2,7 @@ import React from "react";
 
 import hero from "../images/hero.jpg"
 import room1c from "../images/room1c.jpg"
+import { Link, NavLink } from "react-router-dom";
 
 export default function SingleCard({ room }) {
     
@@ -23,7 +24,7 @@ export default function SingleCard({ room }) {
             </div> */}
 
             <div key={room.id} class="card">
-                <img src={room.subImages[0]} alt="Avatar" />
+                <img src={room.images[0]} alt="Avatar" />
                 <h4><b>{room.type}</b></h4>
                 <p>With a choice of our incredible bachelor rooms,<br></br> boasting extra-length king- beds and a kitchen in every room,as well as our Deluxe and Executive
                     Suites featuring some of the largest suites in the city.</p>
@@ -31,7 +32,7 @@ export default function SingleCard({ room }) {
                 <p>Price: R {room.price} </p>
                 <p>Occupents: {room.occupents}</p>
                 <p>Number of Bed: {room.beds} </p>
-                <div className='button'><button className='btnsign'> More Details </button></div>
+                <Link to={"room"} className='button'><button className='btnsign'> More Details </button></Link>
             </div>
 
             {/* <div className="card">

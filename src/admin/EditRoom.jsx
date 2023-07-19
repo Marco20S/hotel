@@ -37,9 +37,9 @@ export default function EditRoom() {
 
 
     //submitting room info to firestore database
-    const handleCreate = async () => {
+    const handleCreate = async (urls) => {
 
-        await addDoc(value, { type: type, price: price, room: roomNumber, subImages: imageUrls, beds: beds, occupents: occupents })
+        await addDoc(value, { type: type, price: price, room: roomNumber, images: urls, beds: beds, occupents: occupents })
 
     }
 
@@ -75,31 +75,38 @@ export default function EditRoom() {
     const uploadImages = async () => {
         const imageURl = [];
 
-        for (let i = 0; i < subImages.length; i++) {
+        for (let image of subImages) {
 
-            const imageRefe = ref(storage, `Room/Subimage/${subImages[i].name}`);
+            console.log(image);
 
-            await uploadBytes(imageRefe, subImages[i]).then((snapshot) => {
-                getDownloadURL(snapshot.ref).then((url) => {
+            const imageRefe = ref(storage, `Room/room${roomNumber}/${image.name}`);
+
+            await uploadBytes(imageRefe, image).then(async (snapshot) => {
+                await getDownloadURL(snapshot.ref).then((url) => {
+                    console.log('img----', url);
                     imageURl.push(url);
+
                 })
             }).catch(() => {
                 console.log("Error")
             })
         }
         console.log(imageURl);
-        // setSubImages(imageURl)
-        setImageUrls(imageURl)
+
+        return imageURl
 
     }
+
+
 
     const upload = (event) => {
         event.preventDefault();
         //uploadFirstImages();
-        uploadImages().then(() => {
-            handleCreate();
+        uploadImages().then((data) => {
+            //setImageUrls(data)
+            handleCreate(data);
         });
-     
+
 
     }
 
@@ -184,7 +191,7 @@ export default function EditRoom() {
                                 <td>{data.type}</td>
                                 <td>{data.price}</td>
                                 <td>{data.room}</td>
-                                <td>{data.subImages[0]}</td>
+                                <td>{data.images}</td>
                                 <td>{data.beds}</td>
                                 <td>{data.occupents}</td>
 
