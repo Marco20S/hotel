@@ -3,7 +3,7 @@ import { database } from '../config/firebase'
 import { collection, query, getDocs } from 'firebase/firestore';
 
 
-export default function Bookinglist({ }) {
+export default function Bookinglist({ availability, totalCost }) {
 
     const [bookings, setBookings] = useState([]);
 
@@ -37,6 +37,7 @@ export default function Bookinglist({ }) {
                     <div key={booking.id} className="container">
                         <h3>{booking.name}</h3>
                         {/* //<h4>Room Type {bookings.roomId}</h4> */}
+                        <p>Total Cost: ${totalCost}</p>
                         <p>Occupents: {booking.occupents}</p>
                         <p>Check-in: {booking.checkInDate}</p>
                         <p>Check-out: {booking.checkOutDate}</p>

@@ -3,7 +3,7 @@ import Footer from '../pages/Footer'
 import Bookinglist from './bookinglist';
 
 import { database } from '../config/firebase'
-import { addDoc, collection, getDocs } from 'firebase/firestore';
+import { addDoc, collection, getDocs, where } from 'firebase/firestore';
 
 export default function Bookings() {
 
@@ -11,33 +11,98 @@ export default function Bookings() {
   const [occupents, setOccupents] = useState('');
   const [checkInDate, setCheckInDate] = useState('');
   const [checkOutDate, setCheckOutDate] = useState('');
+  const [roomID, setRoomID] = useState('')
+  const [price, setPrice] = useState('')
+  const [totalCost, setTotalCost] = useState(0)
+  const [availability, setAvailability] = useState(true)
 
 
-  //data will be pushed into this array
-  const [val, setVal] = useState([])
+
+
+  function today() {
+    const date = new Date()
+    const year = date.getFullYear();
+    const month = ("0" + (date.getMonth() + 1)).slice(-2);
+    const day = ("0" + date.getDate()).slice(-2);
+
+    return `${day}/${month}/${year}`;
+  }
+
+
+
+  const PriceChange = (e) => {
+    const newPrice = parseFloat(e.target.value)
+    setPrice(newPrice)
+
+    //culculates days between both checkin and checkout dates
+
+    if (checkInDate && checkOutDate) {
+
+      //stay in days id the duration period in the room
+
+      const stayInDays = (new Date(checkInDate) - new Date(checkOutDate)) / (1000 * 60 * 60 * 24)
+      setTotalCost(stayInDays)
+    }
+
+  }
+
+  const handleDatesChange = () => {
+    if (checkInDate && checkOutDate && price) {
+
+      const durationInDays = (new Date(checkOutDate) - new Date(checkInDate)) / (1000 * 60 * 60 * 24);
+      setTotalCost(durationInDays * price);
+
+      // Check room availability
+      const bookingsQuery = getDocs(
+        collection(database, 'bookings'),
+        where('roomId', '==', roomID),
+        where('checkOutDate', '>', checkInDate),
+        where('checkInDate', '<', checkOutDate)
+      );
+
+      getDocs(bookingsQuery)
+        .then((querySnapshot) => {
+          setAvailability(querySnapshot.size === 0);
+        })
+        .catch((error) => {
+          console.error('Error checking availability: ', error);
+        });
+    }
+  };
 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!availability) {
+      alert('The room is not available for the selected dates.');
+      return;
+    }
 
     const newBooking = {
       name,
       occupents,
       checkInDate,
       checkOutDate,
+      roomID,
+      price,
+      totalCost,
     };
 
     try {
       // Reference the 'bookings' collection
-      
+
       const bookingRef = await addDoc(collection(database, 'bookings'), newBooking);
       // Add the booking data to Firestore
-      
+
       console.log("Booking ref id", bookingRef.id);
       setName('');
       setOccupents('');
       setCheckInDate('');
       setCheckOutDate('');
+      setRoomID('');
+      setPrice('');
+      setTotalCost(0);
 
     } catch (error) {
 
@@ -63,11 +128,19 @@ export default function Bookings() {
           />
           <br></br>
 
-          <input type="number" className='mail' placeholder="Number of occupents" value={occupents} onChange={(e) => setOccupents(e.target.value)}
+          <input type="number" className='mail' placeholder="Number of occupents" value={occupents}
+            onChange={(e) => {
+              setOccupents(e.target.value);
+              handleDatesChange();
+            }}
           />
           <br></br>
 
-          <input type="date" className='mail' placeholder="Check-in Date" onChange={(e) => setCheckInDate(e.target.value)}
+          <input type="date" className='mail' min={today()} placeholder="Check-in Date"
+            onChange={(e) => {
+              setCheckInDate(e.target.value);
+              handleDatesChange();
+            }}
           />
           <br></br>
 
@@ -76,14 +149,14 @@ export default function Bookings() {
           <br></br>
 
 
-          <button type="submit" className="btnsign">Book Now</button>
+          <button type="submit" disabled={!availability} className="btnsign">Book Now</button>
 
           <br></br>
         </form>
       </div>
       <br></br>
 
-      <Bookinglist />
+      <Bookinglist totalCost={totalCost} availability={availability} />
 
       <div>
         <section className='footer'>

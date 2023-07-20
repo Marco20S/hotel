@@ -32,7 +32,7 @@ export default function SingleCard({ room }) {
                 <p>Price: R {room.price} </p>
                 <p>Occupents: {room.occupents}</p>
                 <p>Number of Bed: {room.beds} </p>
-                <Link to={"room"} className='button'><button className='btnsign'> More Details </button></Link>
+                <Link to={"room"} state ={{room:room }} className='button'><button className='btnsign'> More Details </button></Link>
             </div>
 
             {/* <div className="card">

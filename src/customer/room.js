@@ -1,50 +1,87 @@
 import React from 'react'
+import Footer from '../pages/Footer'
+import { useLocation } from 'react-router-dom'
+import { logDOM } from '@testing-library/react';
+
+
+
 
 export default function Room() {
+
+    const data = useLocation().state; 
+
+    console.log(data.room.images);
+
+
+
   return (
-    <div>room
+    <div>
+        
+        <h1>Room </h1>
+        
+        
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        
 
     <section class="product">
 	<div class="product__photo">
 		<div class="photo-container">
 			<div class="photo-main">
 				<div class="controls">
-					<i class="material-icons">share</i>
-					<i class="material-icons">favorite_border</i>
+					<i hidden class="material-icons">share</i>
+					<i hidden class="material-icons">favorite_border</i>
 				</div>
-				<img src="https://res.cloudinary.com/john-mantas/image/upload/v1537291846/codepen/delicious-apples/green-apple-with-slice.png" alt="green apple slice"/>
+				<img src={data.room.images[0]} alt="green apple slice"/>
 			</div>
 			<div class="photo-album">
 				<ul>
-					<li><img src="https://res.cloudinary.com/john-mantas/image/upload/v1537302064/codepen/delicious-apples/green-apple2.png" alt="green apple"/></li>
-					<li><img src="https://res.cloudinary.com/john-mantas/image/upload/v1537303532/codepen/delicious-apples/half-apple.png" alt="half apple"/></li>
-					<li><img src="https://res.cloudinary.com/john-mantas/image/upload/v1537303160/codepen/delicious-apples/green-apple-flipped.png" alt="green apple"/></li>
-					<li><img src="https://res.cloudinary.com/john-mantas/image/upload/v1537303708/codepen/delicious-apples/apple-top.png" alt="apple top"/></li>
+					<li><img src={data.room.images[0]} alt="green apple"/></li>
+					<li><img src={data.room.images[1]} alt="green apple"/></li>
+					<li><img src={data.room.images[2]} alt="green apple"/></li>
+					{/* <li><img src={data.images[0]} alt="green apple"/></li> */}
 				</ul>
 			</div>
 		</div>
 	</div>
 	<div class="product__info">
 		<div class="title">
-			<h1>Delicious Apples</h1>
+			<h1>{data.room.type}</h1>
 			
 		</div>
 		<div class="price">
-			R <span>7.93</span>
+			R <span>{data.room.price}</span>
 		</div>
 		
 		<div class="description">
-			<h3>BENEFITS</h3>
+
+            <h3>DISCRIPTION</h3>
+            
+
+            <p></p>
+			<h3>AMENITIES</h3>
 			<ul>
-				<li>Apples are nutricious</li>
-				<li>Apples may be good for weight loss</li>
-				<li>Apples may be good for bone health</li>
-				<li>They're linked to a lowest risk of diabetes</li>
+				<li>Toiletries </li>
+				<li>Coffee Kit</li>
+				<li>TV</li>
+				<li>Free WiFi internet access</li>
+				<li> Free parking</li>
+				<li> In-room beer taps</li>
+				<li>In-room games</li>
+				<li>Bar carts and cocktail stations</li>
 			</ul>
 		</div>
-		<button class="buy--btn">ADD TO CART</button>
+		<button class="btnsign">Book Now</button>
 	</div>
 </section>
+
+<br/>
+<br/>
+
+<Footer/>
+
 </div>
   )
 }
