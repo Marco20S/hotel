@@ -50,7 +50,7 @@ export default function Navbar() {
 		<>
 
 			<nav className='navMenu'>
-				<h3>.::. Sky_Hotel .::.</h3>
+				<h3>_.::._ Sky_Hotel _.::._</h3>
 
 				{userRole === "admin" && <Link to='/editHome' className='admin'> Edit Home  </Link>} {/* //admin only */}
 				{userRole === "admin" &&<Link to='/EditRoom' className='admin'> Edit Rooms </Link>}
