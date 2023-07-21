@@ -171,8 +171,8 @@ export default function EditHome() {
                 <td>{data.check}</td>
 
                 <td>
-                  <button onClick={() => handleDelete(data.id)} >Delete</button>
-                  <button onClick={() => handleEdit(data.id, data.address, data.map, data.contact, data.socials, data.facalties, data.policy, data.rating, data.check)} >Update</button>
+                  <button className="btnsign" onClick={() => handleDelete(data.id)} >Delete</button>
+                  <button className="btnsign" onClick={() => handleEdit(data.id, data.address, data.map, data.contact, data.socials, data.facalties, data.policy, data.rating, data.check)} >Update</button>
                 </td>
               </tr>
 

@@ -14,9 +14,7 @@ export default function Bookings() {
   const [roomID, setRoomID] = useState('')
   const [price, setPrice] = useState('')
   const [totalCost, setTotalCost] = useState(0)
-  const [availability, setAvailability] = useState(true)
-
-
+  const [availability, setAvailability] = useState('')
 
 
   function today() {
@@ -65,7 +63,7 @@ export default function Bookings() {
           setAvailability(querySnapshot.size === 0);
         })
         .catch((error) => {
-          console.error('Error checking availability: ', error);
+          alert('Error checking availability: ', error);
         });
     }
   };
@@ -90,6 +88,10 @@ export default function Bookings() {
     };
 
     try {
+
+      //const price = getDocs(collection(database, "AddNewRooms"))
+
+
       // Reference the 'bookings' collection
 
       const bookingRef = await addDoc(collection(database, 'bookings'), newBooking);
@@ -100,7 +102,7 @@ export default function Bookings() {
       setOccupents('');
       setCheckInDate('');
       setCheckOutDate('');
-      setRoomID('');
+      setRoomID(roomID);
       setPrice('');
       setTotalCost(0);
 

@@ -197,8 +197,8 @@ export default function EditRoom() {
 
 
                                 <td>
-                                    <button onClick={() => handleDelete(data.id)} >Delete</button>
-                                    <button onClick={() => handleEdit(data.id, data.type, data.price,)} >Update</button></td>
+                                    <button className="btnsign" onClick={() => handleDelete(data.id)} >Delete</button>
+                                    <button className="btnsign" onClick={() => handleEdit(data.id, data.type, data.price,)} >Update</button></td>
                             </tr>
 
                         )

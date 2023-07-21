@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
     MDBInput,
@@ -10,19 +10,55 @@ import {
 
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../config/firebase";
+import { database } from '../config/firebase'
+import { doc, getDoc } from "firebase/firestore";
 
 
-export default function Login() {
+
+
+export default function Login({ setUP }) {
+
+    useEffect=()=>{
+
+        auth.onAuthStateChanged(async (user) => {
+
+            if (user) {
+    
+                const EmailRef = await getDoc(doc(database, 'admin', user.email))
+                if (EmailRef.exists()) {
+    
+                    setUP(user)
+                    
+                    navigate('/')
+                }
+                else{
+                    setUP()
+                }
+    
+                //     const User = database.collection("admin").get().then(snapshot => {
+                //         setUP('admin')
+                //         navigate('/adminHome')
+                //     })
+                //     setUP()
+            }
+        })
+
+    }
+
+
+   
+
 
     const navigate = useNavigate('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
-
+    const admin = () => { }
 
     const gotohomePage = ((e) => {
         e.preventDefault();
         signInWithEmailAndPassword(auth, email, password).then(() => {
+            // if () { }
             alert("Successfully Logged in")
             navigate('/')
 

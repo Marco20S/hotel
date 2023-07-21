@@ -16,6 +16,30 @@ import singleCard from './components/singleCard';
 import Room from './customer/room';
 
 
+const loggedOutLinks = document.querySelectorAll('.admin')
+const loggedinLinks = document.querySelectorAll('.all')
+const adminLinks = document.querySelectorAll('.admin')
+
+
+const setUP = (role) => {
+
+
+  if (role === "guest") {
+    loggedOutLinks.forEach(item => item.style.display = "none")
+    loggedinLinks.forEach(item => item.style.display = "block")
+
+    console.log(role);
+  }
+  else {
+
+    loggedOutLinks.forEach(item => item.style.display = "block")
+    loggedinLinks.forEach(item => item.style.display = "block")
+
+  }
+
+  console.log(role);
+
+}
 
 
 
@@ -23,29 +47,60 @@ import Room from './customer/room';
 export default function App() {
 
   const [isloggedin, setUserstate] = useState(false)
+  const [userRole, setUserRole] = useState('guest')
+
+  const loggedOutLinks = document.querySelectorAll('.admin')
+  const loggedinLinks = document.querySelectorAll('.all')
+  const adminLinks = document.querySelectorAll('.admin')
+
+
+  const setUP = (role) => {
+
+    setUserRole(role)
+    
+    if (role === "guest") {
+      loggedOutLinks.forEach(item => item.style.display = "none")
+      loggedinLinks.forEach(item => item.style.display = "block")
+
+      console.log(role);
+    }
+    else {
+
+      loggedOutLinks.forEach(item => item.style.display = "block")
+      loggedinLinks.forEach(item => item.style.display = "block")
+
+    }
+
+    console.log(role);
+
+  }
 
 
   return (
     <>
-    <header></header>
+      {/* isPrivate:true */}
+      <header></header>
 
-    <Router> 
-    <Navbar/>
-      <Routes>
-        <Route path='/login' element={<Login/>}    /> 
-        <Route path='/Rooms/room' element={<Room/>}    />
-        <Route path='/register'  element= {<Register/>} />
-        <Route path='/' element= {<Home/>} />
-        <Route path='/edithome' element= {<EditHome/>}/>
-        <Route path='/editroom' element= {<EditRoom/>}/>
-        <Route path='/Rooms' element= {<Rooms/>}/> 
-        <Route path='/cards' element= {<singleCard/>}/> 
-        <Route path='/bookings' element= {<Bookings/>}/>
-      </Routes>
-    </Router>
+      <Router>
+        <Navbar />
+        <Routes>
+          <Route path='/login' element={<Login setUP={setUP} />} />
+          <Route path='/Rooms/room' element={<Room />} />
+          <Route path='/register' element={<Register />} />
+          <Route path='/' element={<Home />} />
+          <Route path='/edithome' element={<EditHome />} />
+          <Route path='/editroom' element={<EditRoom />} />
+          <Route path='/Rooms' element={<Rooms />} />
+          <Route path='/cards' element={<singleCard />} />
+          <Route path='/bookings' element={<Bookings />} />
 
-    {/* <Login/> */}
-    
+
+
+        </Routes>
+      </Router>
+
+      {/* <Login/> */}
+
     </>
   )
 }
