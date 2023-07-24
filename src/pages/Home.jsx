@@ -16,7 +16,8 @@ export default function Home() {
         <Welcome />
 
       </section>
-
+      <br />
+      <br />
 
       <section className="main-container-header">
 
@@ -47,7 +48,7 @@ export default function Home() {
         </div>
 
 
-        <br/>
+        <br />
 
         <h3>Rooms</h3>
 

@@ -18,48 +18,51 @@ import { doc, getDoc } from "firebase/firestore";
 
 export default function Login({ setUP }) {
 
-    useEffect=()=>{
-
-        auth.onAuthStateChanged(async (user) => {
-
-            if (user) {
-    
-                const EmailRef = await getDoc(doc(database, 'admin', user.email))
-                if (EmailRef.exists()) {
-    
-                    setUP(user)
-                    
-                    navigate('/')
-                }
-                else{
-                    setUP()
-                }
-    
-                //     const User = database.collection("admin").get().then(snapshot => {
-                //         setUP('admin')
-                //         navigate('/adminHome')
-                //     })
-                //     setUP()
-            }
-        })
-
-    }
-
-
-   
-
-
-    const navigate = useNavigate('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const navigate = useNavigate('')
+    
+
 
     const admin = () => { }
 
-    const gotohomePage = ((e) => {
+
+
+
+    // const setUP = (role) => {
+
+    //     setUserRole(role)
+        
+    //     if (role === "guest") {
+    //       loggedOutLinks.forEach(item => item.style.display = "none")
+    //       loggedinLinks.forEach(item => item.style.display = "block")
+    
+    //       console.log(role);
+    //     }
+    //     else {
+    
+    //       loggedOutLinks.forEach(item => item.style.display = "block")
+    //       loggedinLinks.forEach(item => item.style.display = "block")
+    
+    //     }
+    
+    //     console.log(role);
+    
+    //   }
+
+
+
+
+  //user goes to homepage when logged in
+   
+  const gotohomePage = ((e) => {
         e.preventDefault();
         signInWithEmailAndPassword(auth, email, password).then(() => {
-            // if () { }
+
+           
+            
             alert("Successfully Logged in")
+            setUP()
             navigate('/')
 
         }).catch((error) => {

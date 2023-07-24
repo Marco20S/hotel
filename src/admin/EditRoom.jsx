@@ -159,7 +159,7 @@ export default function EditRoom() {
             {/* } */}
             <br />
 
-            <button className="btnsign" onClick={() => setShow(!show)}>Enter New Room Form</button>
+            {/* <button className="btnsign" onClick={() => setShow(!show)}>Enter New Room Form</button> */}
 
 
             <br></br>

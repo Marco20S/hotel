@@ -3,7 +3,7 @@ import Footer from '../pages/Footer'
 import Bookinglist from './bookinglist';
 
 import { database } from '../config/firebase'
-import { addDoc, collection, getDocs, where } from 'firebase/firestore';
+import { addDoc, collection, doc, getDoc, getDocs, where } from 'firebase/firestore';
 
 export default function Bookings() {
 
@@ -17,6 +17,9 @@ export default function Bookings() {
   const [availability, setAvailability] = useState('')
 
 
+
+
+
   function today() {
     const date = new Date()
     const year = date.getFullYear();
@@ -27,10 +30,21 @@ export default function Bookings() {
   }
 
 
+  //getting room price in forestore
+  async function getPrice(price) {
+    const productRef = doc(database, "AddNewRooms", price);
+    const productDoc = await getDoc(productRef);
+    const productData = productDoc.data();
+    const roomPrice = productData.price;
+
+    return roomPrice;
+  }
 
   const PriceChange = (e) => {
     const newPrice = parseFloat(e.target.value)
     setPrice(newPrice)
+
+
 
     //culculates days between both checkin and checkout dates
 
@@ -103,7 +117,7 @@ export default function Bookings() {
       setCheckInDate('');
       setCheckOutDate('');
       setRoomID(roomID);
-      setPrice('');
+      setPrice(getPrice);
       setTotalCost(0);
 
     } catch (error) {
