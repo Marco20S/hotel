@@ -15,15 +15,15 @@ export default function SingleCard({ room }) {
         <>
 
 
-            {/* <div class="card">
+            {/* <div className="card">
                 <img src={hero} alt="Avatar"  />
-                <div class="container">
+                <div className="container">
                     <h4><b>John Doe</b></h4>
                     <p>Architect & Engineer</p>
                 </div>
             </div> */}
 
-            <div key={room.id} class="card">
+            <div key={room.id} className="card">
                 <img src={room.images[0]} alt="Avatar" />
                 <h4><b>{room.type}</b></h4>
                 <p>With a choice of our incredible bachelor rooms,<br></br> boasting extra-length king- beds and a kitchen in every room,as well as our Deluxe and Executive
@@ -49,10 +49,10 @@ export default function SingleCard({ room }) {
                 ))}
             </div> */}
             
-            {/* <div class="wrapper">
+            {/* <div className="wrapper">
                 <h1>PHILIPPINES</h1>
-                <div class="image i1"></div>
-                <div class="details"><h1><em>Boracay Island</em></h1>
+                <div className="image i1"></div>
+                <div className="details"><h1><em>Boracay Island</em></h1>
                     <h2>Surfer's Home</h2>
                     <p>3 Days - 2 Nights</p></div>
                 <h1>£750</h1>

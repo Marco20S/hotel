@@ -67,6 +67,8 @@ export default function Login({ setUP }) {
 
         }).catch((error) => {
 
+            
+
             document.getElementById('message').style.display = "block"
             document.getElementById('message').style.color = "red"
             document.getElementById('message').hidden = false
@@ -112,7 +114,7 @@ export default function Login({ setUP }) {
 
                     <label>Password</label>
                     <br />
-                    <input type='password' className='mail' name="password" placeholder="Password" id='form2Example2' label='Password' onChange={(e) => setPassword(e.target.value)} />
+                    <input type='password' className='mail' name="password" placeholder="Password" id='form2Example2' label='Password' onChange={(e) => setPassword(e.target.value.toLocaleLowerCase())} />
                     <br />
 
                     <div className='mb-4'>

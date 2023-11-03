@@ -66,9 +66,9 @@ export default function Footer() {
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3593.662303051203!2d28.264556776043964!3d-25.74867887736008!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1e9560451d408f9d%3A0xb180e978338dcefd!2smLab%20Southern%20Africa!5e0!3m2!1sen!2sza!4v1689319671347!5m2!1sen!2sza"
                width="400" height="300" 
                style= {{border: "0"}}
-               allowfullscreen="" 
+               allowFullScreen="" 
                loading="lazy" 
-               referrerpolicy="no-referrer-when-downgrade"></iframe>
+               referrerPolicy="no-referrer-when-downgrade"></iframe>
               </p>
             </MDBCol>
 

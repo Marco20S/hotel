@@ -40,10 +40,10 @@ export default function Roomlist() {
         <>
             
 {/* 
-            <div class="card">
+            <div className="card">
                 {rooms.map((room) => (
                     <div >
-                        <div key={room.id} class="container">
+                        <div key={room.id} className="container">
                             <img src={room1c} alt="Avatar" />
                             <h4><b>{room.type}</b></h4>
                             <p>With a choice of our incredible bachelor rooms,<br></br> boasting extra-length king- beds and a kitchen in every room,as well as our Deluxe and Executive

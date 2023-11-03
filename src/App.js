@@ -4,7 +4,7 @@ import Login from './pages/login';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { auth, database } from './config/firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import { collection, doc, getDoc } from 'firebase/firestore';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 
@@ -17,47 +17,70 @@ import Rooms from './customer/Rooms';
 import Bookings from './customer/bookings';
 import singleCard from './components/singleCard';
 import Room from './customer/room';
+import { UserRoleContext } from "./components/userRoleContext"
 
 
 
 
 export default function App() {
 
-  
-  const [isloggedin, setUserstate] = useState(false)
-  const [userRole, setUserRole] = useState('guest')
-  const [currentUser, setCurrentUser] = useState('')
+
+  const [isloggedin, setUserstate] = useState(false);
+  const [userRole, setUserRole] = useState('');
+  const [currentUser, setCurrentUser] = useState('');
   // const navigate = useNavigate()
 
 
-  const adminLinks = document.querySelectorAll('.admin')
-  const guestLinks = document.querySelectorAll('.all')
+  const adminLinks = document.querySelectorAll('.admin');
+  const guestLinks = document.querySelectorAll('.all');
 
 
 
-  useEffect  (() => {
+  useEffect(() => {
     console.log("outside ===== OnAuth change")
 
     auth.onAuthStateChanged(async (user) => {
 
-      console.log("OnAuth change", user.email)
-
       if (user) {
+        console.log("OnAuth change", user)
 
-        const EmailRef = await getDoc(doc(database, 'admin', user.email))
+        // const emailRef = await getDoc(doc(database, 'admin', user.email))
+        // const emailRef = doc(collection(database, 'admin', user.email))
+        // const onSnapshot = await getDoc(emailRef)
 
-        console.log(EmailRef);
-        if (EmailRef.exists()) {
+        // console.log('Email Reference from firestore', emailRef.data());
 
-          setUP(EmailRef)
+        // if ( emailRef.exists()) {
 
-          // navigate('/')
+        //   console.log('Document database',  emailRef.data());
+        //   //setUP(EmailRef)
+
+        //   // navigate('/')
+        // }
+        // else {
+        //   //setUP()
+        // }
+
+        const docRef = doc(database, 'admin', user.email);
+        const docSnap = await getDoc(docRef);
+        console.log(docRef.firestore.toJSON());
+
+        if (docSnap.exists()) {
+          const emailRef = docSnap.data();
+          // do something with emailRef
+          console.log('Document database', emailRef);
+          setUP(emailRef)
+
+
+        } else {
+          console.log("No such document exists!");
+
         }
-        else {
-          setUP()
-        }
 
+      } else {
+        setUP(null)
       }
+
     })
   }, [])
 
@@ -87,7 +110,7 @@ export default function App() {
 
     setUserRole(role)
 
-    if (role === "guest") {
+    if (role === "admin") {
       adminLinks.forEach(item => item.style.display = "none")
       guestLinks.forEach(item => item.style.display = "block")
 
@@ -100,7 +123,7 @@ export default function App() {
 
     }
 
-    console.log(role);
+    //console.log(role);
 
   }
 
@@ -111,7 +134,9 @@ export default function App() {
       <header></header>
 
       <Router>
-        <Navbar />
+        <UserRoleContext.Provider value={{ userRole, setUserRole }}>
+          <Navbar roles={setUP} />
+        </UserRoleContext.Provider>
         <Routes>
           <Route path='/login' element={<Login setUP={setUP} />} />
           <Route path='/Rooms/room' element={<Room />} />

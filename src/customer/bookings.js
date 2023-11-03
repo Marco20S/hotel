@@ -1,22 +1,33 @@
 import React, { useEffect, useState } from 'react'
 import Footer from '../pages/Footer'
 import Bookinglist from './bookinglist';
+import { useLocation } from 'react-router-dom'
 
 import { database } from '../config/firebase'
 import { addDoc, collection, doc, getDoc, getDocs, where } from 'firebase/firestore';
 
-export default function Bookings() {
+export default function Bookings({ roomId, roomPrice }) {
+
+  const data = useLocation();
+  console.log("tshego ======== ", data)
 
   const [name, setName] = useState('');
   const [occupents, setOccupents] = useState('');
   const [checkInDate, setCheckInDate] = useState('');
   const [checkOutDate, setCheckOutDate] = useState('');
-  const [roomID, setRoomID] = useState('')
-  const [price, setPrice] = useState('')
+  const [roomID, setRoomID] = useState(roomId)
+  const [price, setPrice] = useState(roomPrice)
+  const [selectedCheckIn, setSelectedCheckIn] = useState('')
+  const [selectedCheckOut, setSelectedCheckOut] = useState('')
   const [totalCost, setTotalCost] = useState(0)
-  const [availability, setAvailability] = useState('')
+  const [availability, setAvailability] = useState(false)
+
+  const value = collection(database, "bookings")
 
 
+  useEffect(() => {
+
+  }, [])
 
 
 
@@ -44,6 +55,11 @@ export default function Bookings() {
     const newPrice = parseFloat(e.target.value)
     setPrice(newPrice)
 
+    //getting room in firestore
+    async function getRoom(room) {
+
+    }
+
 
 
     //culculates days between both checkin and checkout dates
@@ -57,6 +73,12 @@ export default function Bookings() {
     }
 
   }
+
+  const book = async (roomPrice) => {
+    await addDoc(value, { name: name, price: data.state.roomPrice, occupents: occupents, checkInDate: checkInDate, checkOutDate: checkOutDate })
+
+  }
+
 
   const handleDatesChange = () => {
     if (checkInDate && checkOutDate && price) {
@@ -86,19 +108,47 @@ export default function Bookings() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    book()
+
+    //if statement to check if room is available
+
+    // if (room <= numberOfRooms) {
+    //   alert("this room is available")
+    // } else {
+
+    //   if (selectedCheckIn == checkInDate) {
+    //     alert('this room is not available')
+    //   } else if (selectedCheckIn == checkOutDate) {
+    //     alert('this room is not available')
+    //   } else if (selectedCheckIn <= checkInDate) {
+    //     alert('this room is not available')
+    //   } else if (selectedCheckOut >= checkOutDate) {
+    //     alert('this room is not available')
+    //   }
+    // }
+    console.log("line129 -------------", data.state.roomId);
+
+
     if (!availability) {
-      alert('The room is not available for the selected dates.');
+      alert('The room is available for the selected dates.');
+      alert("congratulations we have booked your room")
       return;
+    }else{
+      alert("The room is available for the selected dates")
     }
+
+    // book()
+
+
 
     const newBooking = {
       name,
       occupents,
       checkInDate,
       checkOutDate,
-      roomID,
-      price,
-      totalCost,
+      roomID: data.state.roomId,
+      price: data.state.roomPrice,
+      totalCost: totalCost,
     };
 
     try {
@@ -116,9 +166,10 @@ export default function Bookings() {
       setOccupents('');
       setCheckInDate('');
       setCheckOutDate('');
-      setRoomID(roomID);
-      setPrice(getPrice);
-      setTotalCost(0);
+      setRoomID(data.state.roomId);
+      setPrice('');
+      setTotalCost(price);
+      alert("congratulations we have booked your room")
 
     } catch (error) {
 
@@ -147,7 +198,7 @@ export default function Bookings() {
           <input type="number" className='mail' placeholder="Number of occupents" value={occupents}
             onChange={(e) => {
               setOccupents(e.target.value);
-              handleDatesChange();
+              // handleDatesChange();
             }}
           />
           <br></br>
@@ -160,19 +211,22 @@ export default function Bookings() {
           />
           <br></br>
 
-          <input type="date" className='mail' placeholder="Check-out Date" value={checkOutDate} onChange={(e) => setCheckOutDate(e.target.value)}
-          />
+          <input type="date" className='mail' placeholder="Check-out Date" value={checkOutDate} onChange={(e) => {
+            setCheckOutDate(e.target.value)
+            handleDatesChange()
+          }
+          } />
           <br></br>
 
 
-          <button type="submit" disabled={!availability} className="btnsign">Book Now</button>
+          <button type="submit" className="btnsign">Book Now</button>
 
           <br></br>
         </form>
       </div>
       <br></br>
 
-      <Bookinglist totalCost={totalCost} availability={availability} />
+      {/* <Bookinglist totalCost={totalCost} availability={availability} /> */}
 
       <div>
         <section className='footer'>
@@ -182,7 +236,7 @@ export default function Bookings() {
       </div>
     </>
 
-    // const value = collection(database, "bookings")
+    // const value = collection(database, "bookings")disabled={!availability}
 
     // //useEffects
     // useEffect(() => {
