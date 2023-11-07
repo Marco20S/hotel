@@ -61,6 +61,10 @@ export default function Home() {
         <br />
 
         <h3>Rooms</h3>
+--+
+
+
+
 
         <p className='small'>With a choice of our incredible bachelor rooms, boasting extra-length king- beds and a kitchen in every room,<br></br>as well as our Deluxe and Executive
           Suites featuring some of the largest suites in<br /> the city at impressively affordable rates. Here are some pctures of our suites </p>

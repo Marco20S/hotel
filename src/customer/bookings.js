@@ -9,7 +9,7 @@ import { addDoc, collection, doc, getDoc, getDocs, where } from 'firebase/firest
 export default function Bookings({ roomId, roomPrice }) {
 
   const data = useLocation();
-  console.log("tshego ======== ", data)
+  // console.log("tshego ======== ", data)
 
   const [name, setName] = useState('');
   const [occupents, setOccupents] = useState('');
@@ -21,6 +21,7 @@ export default function Bookings({ roomId, roomPrice }) {
   const [selectedCheckOut, setSelectedCheckOut] = useState('')
   const [totalCost, setTotalCost] = useState(0)
   const [availability, setAvailability] = useState(false)
+  const [newBookings, setNewBookings] = useState('')
 
   const value = collection(database, "bookings")
 
@@ -74,8 +75,13 @@ export default function Bookings({ roomId, roomPrice }) {
 
   }
 
+  // console.log(newBookings)
+
   const book = async (roomPrice) => {
-    await addDoc(value, { name: name, price: data.state.roomPrice, occupents: occupents, checkInDate: checkInDate, checkOutDate: checkOutDate })
+    const newBookingLocal = await addDoc(value, { name: name, price: data.state.roomPrice, occupents: occupents, checkInDate: checkInDate, checkOutDate: checkOutDate, roomID: data.state.roomId, })
+
+    setNewBookings(newBookingLocal)
+      ;
 
   }
 
@@ -108,8 +114,20 @@ export default function Bookings({ roomId, roomPrice }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    book()
+    const newBooking = {
+      name,
+      occupents,
+      checkInDate,
+      checkOutDate,
+      roomID: data.state.roomId,
+      price: data.state.roomPrice,
+      totalCost: totalCost,
 
+
+    };
+
+
+    checkAvailability(newBooking)
     //if statement to check if room is available
 
     // if (room <= numberOfRooms) {
@@ -129,11 +147,14 @@ export default function Bookings({ roomId, roomPrice }) {
     console.log("line129 -------------", data.state.roomId);
 
 
+
     if (!availability) {
       alert('The room is available for the selected dates.');
-      alert("congratulations we have booked your room")
+      // book()
+      // alert("Congratulations, We have booked your room")
+
       return;
-    }else{
+    } else {
       alert("The room is available for the selected dates")
     }
 
@@ -141,15 +162,9 @@ export default function Bookings({ roomId, roomPrice }) {
 
 
 
-    const newBooking = {
-      name,
-      occupents,
-      checkInDate,
-      checkOutDate,
-      roomID: data.state.roomId,
-      price: data.state.roomPrice,
-      totalCost: totalCost,
-    };
+
+
+    setNewBookings(newBooking)
 
     try {
 
@@ -177,6 +192,111 @@ export default function Bookings({ roomId, roomPrice }) {
 
     }
   };
+
+
+  const checkAvailability = async (newBooking) => {
+
+    const key = 'AIzaSyDta77butI5H-YwVKXt4f0j9iz0KhdVqN4'
+    const url = `https://firestore.googleapis.com/v1/projects/hotel-lll/databases/(default)/documents/bookings`;
+
+    await fetch(url).then(
+
+      response => {
+
+
+        return (response.json())
+      }
+    ).then(
+      (json) => {
+
+        const documents = json.documents
+
+        // console.log(json);
+
+
+        let myMenuArray = []
+
+        documents.forEach(doc => {
+          const idarray = doc.name.split('/')
+
+
+          const bookingId = idarray[idarray.length - 1];
+
+          const roomId = doc.fields.roomID?.stringValue
+          const checkIn = doc.fields.checkInDate?.stringValue
+          const checkOut = doc.fields.checkOutDate?.stringValue
+
+          const roomIDName = newBooking?.roomID
+          const roomCheckin = newBooking?.checkInDate
+          const roomCheckOut = newBooking?.checkOutDate
+
+          // if(roomId == newBooking.roomID){
+          //   console.log("Booked room", roomId );
+          // }
+          // else{
+          //   console.log("Available",  roomId);
+          // }
+
+          console.log('new booking ', newBooking);
+
+
+          // check if room is available to book
+
+          if (roomId === newBooking?.roomID) {
+            console.log("Booked room", roomIDName, roomId);
+
+            if (checkIn === newBooking?.checkInDate) {
+              console.log("Booked Checkinhg date ===", roomCheckin, checkIn);
+            }
+            else if (checkOut === newBooking?.checkOutDate) {
+              console.log("Booked  Check Out date ===", roomCheckOut, checkOut);
+            }
+            else {
+              console.log("Room is available 1");
+            }
+          }
+          else {
+            console.log("Room is available");
+          }
+
+
+
+
+
+          // if (roomId === newBooking?.roomID) {
+          //   console.log("Booked room", roomIDName, roomId);
+          // }
+          // else if (checkIn === newBooking?.checkInDate) {
+          //   console.log("Booked Checkinhg date ===", roomCheckin, checkIn);
+          // } 
+          // else if (checkOut === newBooking?.checkOutDate) {
+          //   console.log("Booked room", roomCheckOut, checkOut);
+          // }
+          // else {
+          //   console.log("Room is not available");
+          // }
+
+
+
+          // myMenuArray.push({
+          //   bookingId : bookingId ,
+          //     ...doc.fields.
+          // })
+
+
+        })
+
+        // console.log(" records ..........", myMenuArray);
+
+        // setNewBooking(myMenuArray)
+
+
+      }
+    ).catch(
+      error => console.log("error", error)
+    );
+
+  }
 
 
   return (
@@ -219,7 +339,7 @@ export default function Bookings({ roomId, roomPrice }) {
           <br></br>
 
 
-          <button type="submit" className="btnsign">Book Now</button>
+          <button type="submit" className="btnsign" onClick={() => { checkAvailability() }}>Book Now</button>
 
           <br></br>
         </form>
