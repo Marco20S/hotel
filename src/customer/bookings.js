@@ -245,18 +245,42 @@ export default function Bookings({ roomId, roomPrice }) {
           if (roomId === newBooking?.roomID) {
             console.log("Booked room", roomIDName, roomId);
 
+            // if (checkIn === newBooking?.checkInDate) {
+            //   console.log("Booked Checkinhg date ===", roomCheckin, checkIn);
+            // }
+            // else if (checkOut === newBooking?.checkOutDate) {
+            //   console.log("Booked  Check Out date ===", roomCheckOut, checkOut);
+            // }
+            // else {
+            //   console.log("Room is available 1");
+            // }
+
             if (checkIn === newBooking?.checkInDate) {
-              console.log("Booked Checkinhg date ===", roomCheckin, checkIn);
+              console.log("Booked Check in date ===", roomCheckin, checkIn);
+            }
+            else if (checkIn === newBooking?.checkInDate) {
+              console.log("Booked  Check in date ===", roomCheckin, checkIn);
+            }
+            else if (checkIn >= newBooking?.checkInDate) {
+              console.log("Booked  Check in date ===", roomCheckin, checkIn);
             }
             else if (checkOut === newBooking?.checkOutDate) {
               console.log("Booked  Check Out date ===", roomCheckOut, checkOut);
             }
+            // else if (checkOut === newBooking?.checkOutDate) {
+            //   console.log("Booked  Check Out date ===", roomCheckOut, checkOut);
+            // }
+            else if (checkOut <= newBooking?.checkOutDate) {
+              console.log("Booked  Check Out date ===", roomCheckOut, checkOut);
+            }
             else {
               console.log("Room is available 1");
+              // book()
             }
           }
           else {
             console.log("Room is available");
+
           }
 
 
