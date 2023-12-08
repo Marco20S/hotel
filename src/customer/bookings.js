@@ -275,7 +275,7 @@ export default function Bookings({ roomId, roomPrice }) {
             }
             else {
               console.log("Room is available 1");
-              // book()
+              book()
             }
           }
           else {
