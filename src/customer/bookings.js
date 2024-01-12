@@ -6,7 +6,7 @@ import { useLocation } from 'react-router-dom'
 import { database } from '../config/firebase'
 import { addDoc, collection, doc, getDoc, getDocs, where } from 'firebase/firestore';
 
-export default function Bookings({ roomId, roomPrice }) {
+export default function Bookings({ roomId, roomPrice, roomNAME }) {
 
   const data = useLocation();
   // console.log("tshego ======== ", data)
@@ -16,7 +16,8 @@ export default function Bookings({ roomId, roomPrice }) {
   const [checkInDate, setCheckInDate] = useState('');
   const [checkOutDate, setCheckOutDate] = useState('');
   const [roomID, setRoomID] = useState(roomId)
-  const [price, setPrice] = useState(roomPrice)
+  const [roomName, setRoomName] = useState(data.state.roomNAME)
+  const [price, setPrice] = useState(data.state.roomPrice)
   const [selectedCheckIn, setSelectedCheckIn] = useState('')
   const [selectedCheckOut, setSelectedCheckOut] = useState('')
   const [totalCost, setTotalCost] = useState(0)
@@ -52,6 +53,17 @@ export default function Bookings({ roomId, roomPrice }) {
     return roomPrice;
   }
 
+  // const totalRoomCost = Number(data.state.roomPrice) * (new Date(checkInDate) - new Date(checkOutDate)) / (1000 * 60 * 60 * 24);
+
+  function createTimestamp(checkInDate) {
+    var timestamp = new Date(checkInDate).getTime();
+    return timestamp;
+  }
+
+  const totalRoomCost = Number(data.state.roomPrice) * ((createTimestamp(checkOutDate) - createTimestamp(checkInDate)) / (1000 * 60 * 60 * 24));
+  // console.log(typeof   createTimestamp(checkInDate) );
+
+
   const PriceChange = (e) => {
     const newPrice = parseFloat(e.target.value)
     setPrice(newPrice)
@@ -78,7 +90,7 @@ export default function Bookings({ roomId, roomPrice }) {
   // console.log(newBookings)
 
   const book = async (roomPrice) => {
-    const newBookingLocal = await addDoc(value, { name: name, price: data.state.roomPrice, occupents: occupents, checkInDate: checkInDate, checkOutDate: checkOutDate, roomID: data.state.roomId, })
+    const newBookingLocal = await addDoc(value, { name: name, price: totalRoomCost, occupents: occupents, checkInDate: checkInDate, checkOutDate: checkOutDate, roomID: data.state.roomId, roomtype: roomName })
 
     setNewBookings(newBookingLocal)
       ;
@@ -119,8 +131,9 @@ export default function Bookings({ roomId, roomPrice }) {
       occupents,
       checkInDate,
       checkOutDate,
+      roomName: data.state.roomNAME,
       roomID: data.state.roomId,
-      price: data.state.roomPrice,
+      price: totalRoomCost,
       totalCost: totalCost,
 
 
@@ -145,183 +158,330 @@ export default function Bookings({ roomId, roomPrice }) {
     //   }
     // }
     console.log("line129 -------------", data.state.roomId);
-
-
-
-    if (!availability) {
-      alert('The room is available for the selected dates.');
-      // book()
-      // alert("Congratulations, We have booked your room")
-
-      return;
-    } else {
-      alert("The room is available for the selected dates")
-    }
+    console.log("line150 -------------", data.state.roomNAME);
 
     // book()
 
+    // if (!availability) {
+    //   alert('The room is available for the selected dates.');
+    //   // book()
+    //   // alert("Congratulations, We have booked your room")
+
+    //   return;
+    // } else {
+    //   alert("The room is available for the selected dates")
+    // }
 
 
 
+
+
+
+
+
+
+    // try {
+
+    //   //const price = getDocs(collection(database, "AddNewRooms"))
+
+    //   // Reference the 'bookings' collection
+
+    //   const bookingRef = await addDoc(collection(database, 'bookings'), newBooking);
+    //   // Add the booking data to Firestore
+
+    //   console.log("Booking ref id", bookingRef.id);
+    //   setName('');
+    //   setOccupents('');
+    //   setCheckInDate('');
+    //   setCheckOutDate('');
+    //   setRoomID(data.state.roomId);
+    //   setRoomName(roomName)
+    //   setPrice('');
+    //   setTotalCost(price);
+
+    //   // alert("congratulations we have booked your room")
+
+
+    // } catch (error) {
+
+    //   console.log('Error adding booking:', error);
+
+    // }
 
     setNewBookings(newBooking)
-
-    try {
-
-      //const price = getDocs(collection(database, "AddNewRooms"))
-
-
-      // Reference the 'bookings' collection
-
-      const bookingRef = await addDoc(collection(database, 'bookings'), newBooking);
-      // Add the booking data to Firestore
-
-      console.log("Booking ref id", bookingRef.id);
-      setName('');
-      setOccupents('');
-      setCheckInDate('');
-      setCheckOutDate('');
-      setRoomID(data.state.roomId);
-      setPrice('');
-      setTotalCost(price);
-      alert("congratulations we have booked your room")
-
-    } catch (error) {
-
-      console.log('Error adding booking:', error);
-
-    }
   };
 
 
+  // const checkAvailability = async (newBooking) => {
+
+  //   const key = 'AIzaSyDta77butI5H-YwVKXt4f0j9iz0KhdVqN4'
+  //   const url = `https://firestore.googleapis.com/v1/projects/hotel-lll/databases/(default)/documents/bookings`;
+
+  //   let isRoombooked = false
+
+  //   await fetch(url).then(
+
+  //     response => {
+
+
+  //       return (response.json())
+  //     }
+  //   ).then(
+  //      (json) => {
+
+  //       const documents = json.documents
+
+  //       // console.log(json);
+
+
+
+
+  //        documents.some(doc => {
+  //         const idarray = doc.name.split('/')
+
+
+  //         const bookingId = idarray[idarray.length - 1];
+
+  //         const roomId = doc.fields.roomID?.stringValue
+  //         // const roomType = doc.fields.roomName?.stringValue
+  //         const checkIn = doc.fields.checkInDate?.stringValue
+  //         const checkOut = doc.fields.checkOutDate?.stringValue
+
+  //         const roomIDName = newBooking?.roomID
+  //         const roomCheckin = newBooking?.checkInDate
+  //         const roomCheckOut = newBooking?.checkOutDate
+  //         // console.log(roomType);
+
+  //         // if(roomId == newBooking.roomID){
+  //         //   console.log("Booked room", roomId );
+  //         // }
+  //         // else{
+  //         //   console.log("Available",  roomId);
+  //         // }
+
+  //         console.log('new booking ', newBooking);
+
+
+
+
+  //         // check if room is available to book
+
+  //         if (roomId === newBooking?.roomID) {
+  //           console.log("Booked room", roomIDName, roomId);
+
+
+  //           if (checkIn === newBooking?.checkInDate) {
+  //             console.log("Booked Check in date ===", roomCheckin, checkIn);
+  //             isRoombooked = true;
+
+  //             // alert("This room is Booked");
+  //           }else if (checkIn >= newBooking?.checkInDate) {
+  //             console.log("Booked  Check in date ===", roomCheckin, checkIn);
+  //             // console.log();(" This room is Booked");
+  //             isRoombooked = true;
+  //           }
+  //           else if (checkOut === newBooking?.checkOutDate) {
+  //             console.log("Booked  Check Out date ===", roomCheckOut, checkOut);
+  //             isRoombooked = true;
+
+  //             // alert(" This room is Booked");
+  //           }
+
+  //           else if (checkOut <= newBooking?.checkOutDate) {
+  //             console.log("Booked  Check Out date ===", roomCheckOut, checkOut);
+  //             isRoombooked = true;
+
+  //             // console.log();(" This room is Booked");
+  //           }
+  //           else {
+  //             console.log("Room is available 1");
+  //             // isRoombooked = true;
+  //             // alert(" This Room is available 1");
+  //             // book()
+  //             // alert("Congratulations, We have booked your room")
+  //           }
+  //         }
+
+  //         else {
+  //           // alert("Room is available");
+  //           // book()
+  //           // alert("Congratulations, We have booked your room")
+  //         }
+
+  //         if (isRoombooked) {
+  //           console.log(isRoombooked);
+  //           alert("This room is Booked");
+  //         } else {
+  //           console.log(isRoombooked);
+  //           alert("The Room is Available for booking");
+  //         }
+
+
+
+
+
+  //         // if (roomId === newBooking?.roomID) {
+  //         //   console.log("Booked room", roomIDName, roomId);
+  //         // }
+  //         // else if (checkIn === newBooking?.checkInDate) {
+  //         //   console.log("Booked Checkinhg date ===", roomCheckin, checkIn);
+  //         // } 
+  //         // else if (checkOut === newBooking?.checkOutDate) {
+  //         //   console.log("Booked room", roomCheckOut, checkOut);
+  //         // }
+  //         // else {
+  //         //   console.log("Room is not available");
+  //         // }
+
+
+
+  //         // myMenuArray.push({
+  //         //   bookingId : bookingId ,
+  //         //     ...doc.fields.
+  //         // })
+
+
+  //       })
+
+
+
+  //       // alert( (isRoombooked ? "This room is Booked": "The Room is Available"));
+  //       // console.log(" records ..........", myMenuArray);
+
+  //       // setNewBooking(myMenuArray)
+
+
+  //     }
+  //   ).catch(
+  //     error => console.log("error", error)
+  //   )
+  //   // .finally(() => {
+
+  //   //   if (isRoombooked) {
+  //   //     console.log(isRoombooked);
+  //   //     alert("This room is Booked")
+
+  //   //   } else {
+  //   //     console.log(isRoombooked);
+
+  //   //     alert("The Room is Available")
+
+  //   //   }
+  //   // })
+
+  // }
+
+  // const checkAvailability = async (newBooking) => {
+  //   const key = 'AIzaSyDta77butI5H-YwVKXt4f0j9iz0KhdVqN4';
+  //   const url = `https://firestore.googleapis.com/v1/projects/hotel-lll/databases/(default)/documents/bookings`;
+  //   let isRoombooked = false;
+
+  //   await fetch(url)
+  //     .then((response) => response.json())
+  //     .then((json) => {
+  //       const documents = json.documents;
+
+  //       documents.some((doc) => {
+  //         const idarray = doc.name.split('/');
+  //         const bookingId = idarray[idarray.length - 1];
+  //         const roomId = doc.fields.roomID?.stringValue;
+  //         const checkIn = doc.fields.checkInDate?.stringValue;
+  //         const checkOut = doc.fields.checkOutDate?.stringValue;
+
+  //         const roomIDName = newBooking?.roomID;
+  //         const roomCheckin = newBooking?.checkInDate;
+  //         const roomCheckOut = newBooking?.checkOutDate;
+
+  //         console.log('new booking ', newBooking);
+
+  //         if (roomId === newBooking?.roomID) {
+  //           console.log("Booked room", roomIDName, roomId);
+
+  //           if (checkIn === newBooking?.checkInDate) {
+  //             console.log("Booked Check in date ===", roomCheckin, checkIn);
+  //             isRoombooked = true;
+  //           } else if (checkIn >= newBooking?.checkInDate) {
+  //             console.log("Booked  Check in date ===", roomCheckin, checkIn);
+  //             isRoombooked = true;
+  //           } else if (checkOut === newBooking?.checkOutDate) {
+  //             console.log("Booked  Check Out date ===", roomCheckOut, checkOut);
+  //             isRoombooked = true;
+  //           } else if (checkOut <= newBooking?.checkOutDate) {
+  //             console.log("Booked  Check Out date ===", roomCheckOut, checkOut);
+  //             isRoombooked = true;
+  //           } else {
+  //             console.log("Room is available");
+  //           }
+  //         }
+  //         return isRoombooked;
+  //       });
+
+
+  //     })
+  //     .catch(
+  //       (error) => console.log("error", error)
+  //     ).finally(()=>{
+
+
+  //       if (isRoombooked == true) {
+  //         console.log(isRoombooked);
+  //         alert("This room is Booked");
+  //       } else {
+  //         console.log(isRoombooked);
+  //         alert("The Room is Available for booking");
+  //         // book()
+          
+  //       }
+  //     });
+  // };
+
+
   const checkAvailability = async (newBooking) => {
-
-    const key = 'AIzaSyDta77butI5H-YwVKXt4f0j9iz0KhdVqN4'
+    const key = 'AIzaSyDta77butI5H-YwVKXt4f0j9iz0KhdVqN4';
     const url = `https://firestore.googleapis.com/v1/projects/hotel-lll/databases/(default)/documents/bookings`;
-
-    await fetch(url).then(
-
-      response => {
-
-
-        return (response.json())
-      }
-    ).then(
-      (json) => {
-
-        const documents = json.documents
-
-        // console.log(json);
-
-
-        let myMenuArray = []
-
-        documents.forEach(doc => {
-          const idarray = doc.name.split('/')
-
-
+    let isRoombooked = false;
+  
+    await fetch(url)
+      .then((response) => response.json())
+      .then((json) => {
+        const documents = json.documents;
+  
+        documents.forEach((doc) => {
+          const idarray = doc.name.split('/');
           const bookingId = idarray[idarray.length - 1];
-
-          const roomId = doc.fields.roomID?.stringValue
-          const checkIn = doc.fields.checkInDate?.stringValue
-          const checkOut = doc.fields.checkOutDate?.stringValue
-
-          const roomIDName = newBooking?.roomID
-          const roomCheckin = newBooking?.checkInDate
-          const roomCheckOut = newBooking?.checkOutDate
-
-          // if(roomId == newBooking.roomID){
-          //   console.log("Booked room", roomId );
-          // }
-          // else{
-          //   console.log("Available",  roomId);
-          // }
-
+          const roomId = doc.fields.roomID?.stringValue;
+          const checkIn = doc.fields.checkInDate?.stringValue;
+          const checkOut = doc.fields.checkOutDate?.stringValue;
+  
+          const roomIDName = newBooking?.roomID;
+          const roomCheckin = newBooking?.checkInDate;
+          const roomCheckOut = newBooking?.checkOutDate;
+  
           console.log('new booking ', newBooking);
-
-
-          // check if room is available to book
-
+  
           if (roomId === newBooking?.roomID) {
             console.log("Booked room", roomIDName, roomId);
-
-            // if (checkIn === newBooking?.checkInDate) {
-            //   console.log("Booked Checkinhg date ===", roomCheckin, checkIn);
-            // }
-            // else if (checkOut === newBooking?.checkOutDate) {
-            //   console.log("Booked  Check Out date ===", roomCheckOut, checkOut);
-            // }
-            // else {
-            //   console.log("Room is available 1");
-            // }
-
-            if (checkIn === newBooking?.checkInDate) {
-              console.log("Booked Check in date ===", roomCheckin, checkIn);
-            }
-            else if (checkIn === newBooking?.checkInDate) {
-              console.log("Booked  Check in date ===", roomCheckin, checkIn);
-            }
-            else if (checkIn >= newBooking?.checkInDate) {
-              console.log("Booked  Check in date ===", roomCheckin, checkIn);
-            }
-            else if (checkOut === newBooking?.checkOutDate) {
-              console.log("Booked  Check Out date ===", roomCheckOut, checkOut);
-            }
-            // else if (checkOut === newBooking?.checkOutDate) {
-            //   console.log("Booked  Check Out date ===", roomCheckOut, checkOut);
-            // }
-            else if (checkOut <= newBooking?.checkOutDate) {
-              console.log("Booked  Check Out date ===", roomCheckOut, checkOut);
-            }
-            else {
-              console.log("Room is available 1");
-              book()
+  
+            if (checkIn === newBooking?.checkInDate || checkOut === newBooking?.checkOutDate) {
+              console.log("Booked Check in/out date ===", roomCheckin, checkIn, roomCheckOut, checkOut);
+              isRoombooked = true;
             }
           }
-          else {
-            console.log("Room is available");
-
-          }
-
-
-
-
-
-          // if (roomId === newBooking?.roomID) {
-          //   console.log("Booked room", roomIDName, roomId);
-          // }
-          // else if (checkIn === newBooking?.checkInDate) {
-          //   console.log("Booked Checkinhg date ===", roomCheckin, checkIn);
-          // } 
-          // else if (checkOut === newBooking?.checkOutDate) {
-          //   console.log("Booked room", roomCheckOut, checkOut);
-          // }
-          // else {
-          //   console.log("Room is not available");
-          // }
-
-
-
-          // myMenuArray.push({
-          //   bookingId : bookingId ,
-          //     ...doc.fields.
-          // })
-
-
-        })
-
-        // console.log(" records ..........", myMenuArray);
-
-        // setNewBooking(myMenuArray)
-
-
-      }
-    ).catch(
-      error => console.log("error", error)
-    );
-
-  }
-
+        });
+  
+        if (isRoombooked === true) {
+          console.log(isRoombooked);
+          alert("This room is Booked");
+        } else if(isRoombooked === false) {
+          console.log(isRoombooked);
+          alert("The Room is Available for booking");
+          // book()
+          // alert("Congratulations this room is booked for the selected dates")
+        }
+      })
+      .catch((error) => console.log("error", error));
+  };
+  
 
   return (
     <>
@@ -371,6 +531,21 @@ export default function Bookings({ roomId, roomPrice }) {
       <br></br>
 
       {/* <Bookinglist totalCost={totalCost} availability={availability} /> */}
+
+      <div className="card">
+
+        <div className="container">
+          <h3>{name}</h3>
+          {/* //<h4>Room Type {bookings.roomId}</h4> */}
+          <h5>Room Type: {roomName} </h5>
+
+          <p>Total Cost: R {totalRoomCost}</p>
+          <p>Occupents: {occupents}</p>
+          <p>Check-in: {checkInDate}</p>
+          <p>Check-out: {checkOutDate}</p>
+        </div>
+
+      </div>
 
       <div>
         <section className='footer'>

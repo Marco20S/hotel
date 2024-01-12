@@ -76,7 +76,7 @@ export default function Room() {
 							<li>Bar carts and cocktail stations</li>
 						</ul>
 					</div>
-					<button className="btnsign" onClick={() => { navigate('/bookings', { state: { roomId: data.room.id , roomPrice:data.room.price }  }) }}>Book Now</button>
+					<button className="btnsign" onClick={() => { navigate('/bookings', { state: { roomId: data.room.id , roomPrice:data.room.price, roomNAME: data.room.type }  }) }}>Book Now</button>
 				</div>
 			</section>
 
